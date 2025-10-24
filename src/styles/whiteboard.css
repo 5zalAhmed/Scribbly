@@ -1,0 +1,307 @@
+:root {
+  /* Dark theme (default) */
+  --bg-dark: #121212;
+  --panel: #141414;
+  --canvas-bg: #121212;
+  --text-dark: #ffffff;
+  --text-light: #000000;
+  --muted: #9aa5b1;
+  --accent: #2979ff;
+  --glass: rgba(255,255,255,0.06);
+  --toolbar-dark: rgba(28, 28, 28, 0.95);
+  --toolbar-light: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme='light'] {
+  --bg: #ffffff;
+  --panel: #f5f5f5;
+  --canvas-bg: #ffffff;
+  --text: #000000;
+  --muted: #666666;
+  --accent: #2979ff;
+  --glass: rgba(0,0,0,0.06);
+}
+
+/* Add theme toggle button styles */
+.theme-toggle {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--toolbar-bg);
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  color: var(--text);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body { margin: 0; font-family: Inter, system-ui, -apple-system, sans-serif; background: var(--bg); color: #fff; overflow: hidden; -webkit-font-smoothing:antialiased; -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; }
+
+.whiteboard-root {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease;
+}
+
+.whiteboard-root { position: relative; width: 100vw; height: 100vh; background: var(--bg); }
+
+.whiteboard-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #121212;
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #121212;
+  cursor: crosshair;
+  border: none !important;
+  outline: none !important;
+  display: block;
+  z-index: 0;
+  touch-action: none;
+  pointer-events: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure no text selection anywhere */
+* {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* menu toggle */
+.menu-toggle {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #ffffff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: all 0.2s ease;
+}
+
+.menu-toggle:hover {
+  background: #222;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+}
+
+/* toolbar modal overlay */
+.toolbar {
+  position: fixed;
+  left: 20px;
+  top: 84px;
+  width: 320px;
+  background: #1a1a1a;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  z-index: 1150;
+  padding: 16px;
+}
+
+.tools-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tool-group {
+  background: rgba(255,255,255,0.03);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* closed / open */
+.toolbar.closed { transform: translateX(-220px) scale(.98); opacity: 0; pointer-events: none; }
+.toolbar.open { transform: translateX(0) scale(1); opacity: 1; pointer-events: auto; }
+
+.tools-wrapper {
+  height: 100%;
+  padding-right: 0; /* Remove right padding */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto; /* Add scroll to inner wrapper */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Hide scrollbar for Chrome/Safari/Opera */
+.tools-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.tool-group { 
+  flex-shrink: 0; /* Prevent shrinking */
+  min-height: fit-content;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.tool-group-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+/* responsive grid: prevent overflow */
+.tool-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+  gap: 8px;
+}
+
+/* icon buttons: all use same font family */
+.tool-btn {
+  height: 56px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 120ms, background 120ms, box-shadow 120ms;
+  font-family: 'Segoe UI Symbol', 'Apple Color Emoji', sans-serif;
+  line-height: 1;
+  padding: 0;
+}
+
+.tool-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.tool-btn.active { background: rgba(41,121,255,0.16); color: var(--accent); box-shadow: 0 0 0 3px rgba(41,121,255,0.06); }
+
+/* color + size: ensure padding between color and size controls */
+.color-picker { width: 100%; height: 44px; border-radius: 10px; border: none; cursor: pointer; margin-bottom: 12px; }
+.size-control { display:flex; gap:12px; align-items:center; margin-top: 8px; }
+.brush-size { flex:1; height:4px; -webkit-appearance:none; background: rgba(255,255,255,0.1); border-radius:2px; }
+.brush-size::-webkit-slider-thumb { -webkit-appearance:none; width:12px; height:12px; border-radius:50%; background: var(--accent); cursor: pointer; }
+.size-label { min-width: 40px; color: var(--muted); font-size: 12px; text-align: right; }
+
+/* clear button */
+.clear-btn { width:100%; padding:10px; border-radius:10px; border:none; background: rgba(255,59,48,0.08); color:#ff6b61; cursor:pointer; }
+
+/* welcome overlay: visible but non-blocking so canvas receives pointer events */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  background: rgba(11,11,11,0.5); /* More transparent background */
+  text-align: center;
+  padding: 24px;
+  pointer-events: none; /* allow clicks to pass to canvas */
+  backdrop-filter: blur(4px); /* Optional: adds slight blur effect */
+}
+.welcome-overlay h1 { margin:0; font-size:36px; line-height:1; background: linear-gradient(90deg,#00e5ff,#2979ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.welcome-overlay p { color: #9aa5b1; margin-top:12px; font-size:16px; }
+
+@media (max-width: 700px) {
+  .toolbar { left: 12px; width: calc(100% - 24px); top: 72px; }
+  .tool-buttons { grid-template-columns: repeat(auto-fit, minmax(48px, 1fr)); }
+}
+
+/* Smooth transitions for theme switch */
+.whiteboard-root * {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Add these new styles for the enhanced color picker */
+.color-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.color-presets {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.color-preset {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.1);
+  background: var(--preset-color);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.color-preset:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.color-preset.active {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+}
+
+.color-picker-wrapper {
+  position: relative;
+  width: 100%;
+  height: 36px;
+}
+
+.color-display {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: var(--selected-color);
+  border: 2px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+
+.color-input {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}

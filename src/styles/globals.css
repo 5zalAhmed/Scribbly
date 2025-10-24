@@ -1,0 +1,32 @@
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+canvas {
+    border: 1px solid #ccc;
+    display: block;
+    margin: 0 auto;
+}
