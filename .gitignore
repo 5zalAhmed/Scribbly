@@ -14,3 +14,6 @@ Thumbs.db
 
 # Env files
 .env
+*.pem
+*.key
+id_rsa
